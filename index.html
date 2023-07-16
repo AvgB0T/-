@@ -57,28 +57,29 @@
         .chat-message {
             margin-bottom: 20px;
             color: #333;
+            display: flex;
+            justify-content: space-between;
         }
         .chat-message .user {
             font-weight: bold;
             color: #333;
         }
-        .chat-message .time {
-            font-size: 12px;
-            color: #999;
-        }
-        .bot-message {
-            background-color: #e6f3ff;
-            padding: 8px;
-            border-radius: 5px;
-            color: #333;
-        }
         .user-message {
-            background-color: #f2f2f2;
-            text-align: right;
-            padding: 8px;
-            border-radius: 5px;
-            color: #333;
-        }
+        background-color: #f2f2f2;
+        text-align: right;
+        padding: 8px;
+        border-radius: 5px;
+        color: #333;
+        align-self: flex-end;
+    }
+
+    .bot-message {
+        background-color: #e6f3ff;
+        padding: 8px;
+        border-radius: 5px;
+        color: #333;
+        align-self: flex-start;
+    }
         .user-message .content {
             display: none;
         }
@@ -129,6 +130,35 @@
         .dark-mode .user-message {
             background-color: #333;
         }
+        .bot-avatar {
+            width: 30px;
+            height: 30px;
+            margin-right: 8px;
+            vertical-align: middle;
+            border-radius: 50%;
+        }
+        .chat-message .message-content {
+            display: flex;
+            align-items: center;
+        }
+        .chat-message .message-content img {
+            width: 30px;
+            height: 30px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        .bot-message .user {
+            display: none;
+        }
+        .bot-message .message-content {
+            display: flex;
+            align-items: center;
+        }
+        .bot-message .message-content img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -162,21 +192,14 @@
 
         // Function to append a new message to the chat box
         function appendMessage(user, message, isBot) {
-            var timestamp = new Date().toLocaleTimeString();
             var newMessage = document.createElement('div');
             newMessage.className = 'chat-message';
             newMessage.classList.add(isBot ? 'bot-message' : 'user-message');
-            newMessage.innerHTML = '<span class="user">' + user + '</span>: ' + message + '<br><span class="time">' + timestamp + '</span>';
+            var messageContent = '<div class="message-content">' + (isBot ? '<img class="bot-avatar" src="avgbot.png">' : 'You:') +
+                ' ' + message + '</div>';
+            newMessage.innerHTML = messageContent;
             chatBox.appendChild(newMessage);
             chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Hide the user message content if it is a bot message
-            if (isBot) {
-                var userMessageContent = newMessage.querySelector('.content');
-                if (userMessageContent) {
-                    userMessageContent.style.display = 'none';
-                }
-            }
         }
 
         // Function to generate a random response from the bot
